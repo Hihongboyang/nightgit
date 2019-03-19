@@ -1,6 +1,7 @@
 #!/usr/bin/env python 
 # -*- coding:utf-8 -*-
 
+
 class Array:
     def __init__(self, capacity, fillValue=None):
         self._items = list()
