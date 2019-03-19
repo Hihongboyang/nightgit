@@ -1,6 +1,7 @@
 #!/usr/bin/env python 
 # -*- coding:utf-8 -*-
 
+
 class AbstractCollection:
     def __init__(self, sourceCollection):
         self._size = 0
