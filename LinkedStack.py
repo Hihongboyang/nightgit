@@ -9,7 +9,7 @@ class LinkedStack(AbstractStack):
     def __init__(self, sourceCollection = None):
         self._items = None
         AbstractStack.__init__(self, sourceCollection)
-        
+
     def __iter__(self):
         def visitNodes(node):
             if not node is None:
