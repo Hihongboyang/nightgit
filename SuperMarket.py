@@ -24,3 +24,23 @@ class MarketModel:
     def __str__(self):
         return str(self._cashier)
 
+
+class Cashier:
+    def __init__(self):
+        self._totalCustomerwaitTime = 0
+        self._customerServed = 0
+        self._currentCustomer =None
+        self._queue = LinkedQueue()
+
+    def addCustomer(self, c):
+        self._queue.add(c)
+
+    def serveCustomers(self, currentTime):
+        if self._currentCustomer is None:
+            if self._queue.isEmpty():
+                return
+            else:
+                self._currentCustomer = self.queue.pop()
+                self._totalCustomerwaitTime += currentTime - self._currentCustomer.arrivalTime()
+                self._customerServed += 1
+
