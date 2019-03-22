@@ -52,4 +52,10 @@ class ArrayStack(AbstractStack):
             raise KeyError("栈现在是空的，不能弹出值！")
         olditem = self._items[len(self) - 1]
         self._size -= 1
+
+        if self._size < len(self._items)/3:
+            newarray = Array(len(self._items)/2)
+            for i in range(self._size):
+                newarray[i] = self._items[i]
+            self._items = newarray
         return olditem
