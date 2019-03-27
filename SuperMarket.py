@@ -21,6 +21,8 @@ class LinkedQueue(AbstractCollection):
         self._size += 1
 
     def pop(self):
+        if self.isEmpty():
+            raise KeyError("队列为空不能弹出")
         olditem = self._front.data
         self._front = self._front.next
         if self._front == None:
@@ -41,7 +43,7 @@ class LinkedQueue(AbstractCollection):
 
     def peek(self):
         if self.isEmpty():
-            raise KeyError("The queue is empty.")
+            raise KeyError("队列现在是空的")
         return self._front.data
 
 class MarketModel:
