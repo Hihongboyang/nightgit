@@ -1,5 +1,11 @@
 #!/usr/bin/env python 
 # -*- coding:utf-8 -*-
+import random
+
+BLOCK_WIDTH = 30
+BLOCK_HEIGHT = 16
+SIZE = 20
+MINE_COUNT = 99
 
 
 class BlockStatus:
@@ -74,3 +80,70 @@ class MineBlock:
 
         for i in random.sample(range(BLOCK_WIDTH * BLOCK_HEIGHT), MINE_COUNT):
             self._block[i // BLOCK_WIDTH][i % BLOCK_WIDTH].value = 1
+
+    def get_block(self):
+        return self._block
+
+    block = property(fget=get_block)
+
+    def getmine(self, x, y):
+        return self._block[y][x]
+
+    def open_mine(self, x, y):
+        if self._block[y][x].value:
+            self._block[y][x].status = BlockStatus.bomb
+            return False
+
+        self._block[y][x].status = BlockStatus.opened
+
+        around = _get_around(x, y)
+
+        _sum = 0
+        for i,j in around:
+            if self._block[j][i].value:
+                _sum += 1
+        self._block[y][x].around_mine_count = _sum
+
+        if _sum == 0:
+            for i, j in around:
+                if self._block[j][i].around_mine_count == -1:
+                    self.open_mine(i, j)
+
+        return True
+
+    def double_mouse_button_down(self, x, y):
+        if self._block[y][x].around_mine_count == 0:
+            return True
+
+        self._block[y][x].status = BlockStatus.double
+
+        around =_get_around(x, y)
+
+        sumflag = 0
+        for i, j in _get_around(x, y):
+            if self._block[j][i].status == BlockStatus.flag:
+                sumflag += 1
+
+        result = True
+        if sumflag == self._block[y][x].around_mine_count:
+            for i, j in around:
+                if self._block[j][i].status == BlockStatus.normal:
+                    if not self.open_mine(i, j):
+                        result = False
+
+        else:
+            for i, j in around:
+                if self._block[j][i].status == BlockStatus.normal:
+                    self._block[j][i].status = BlockStatus.hint
+
+        return result
+    def double_mouse_button_up(self, x, y):
+        self._block[y][x].status = BlockStatus.opened
+        for  i,j in _get_around(x, y):
+            if self._block[j][i].status == BlockStatus.hint:
+                self._block[j][i].status = BlockStatus.normal
+def _get_around(x, y):
+    return [(i, j) for i in range(max(0, x-1), min(BLOCK_WIDTH - 1, x +1 ) + 1)
+            for j in range(max(0, y - 1),min(BLOCK_HEIGHT - 1, y+ 1) + 1) if i != x or j != y]
+
+
