@@ -35,6 +35,32 @@ def Half_fold_Insert(sequence, inser_seq):
                 low = mid +1
         sequence.insert(high, temp)
 
+def BubbleSort(sequence):
+    """冒泡排序"""
+    length = len(sequence)
+    for i in range(length-1, -1 , -1):
+        for j in range(i-1, -1, -1):
+            if sequence[i] > sequence[j]:
+                sequence[j], sequence[i] = sequence[i], sequence[j]
+
+def QuickSort(sequence, left, right):
+    if left < right:
+        mid = partition(sequence, left, right)
+        QuickSort(sequence, left, mid-1)
+        QuickSort(sequence, mid+1, right)
+
+def partition(sequence, left, right):
+    temp = sequence[left]
+    while left < right:
+        while left < right and temp <= sequence[right]:
+            right -= 1
+        sequence[left] = sequence[right]
+        while left < right and temp >= sequence[left]:
+            left += 1
+        sequence[right] = sequence[left]
+    sequence[left] = temp
+    return left
+
 
 
 
